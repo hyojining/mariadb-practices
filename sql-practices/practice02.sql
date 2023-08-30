@@ -4,12 +4,10 @@
 -- 최고임금(salary)과  최저임금을 "최고임금", "최저임금"프로젝션 타이틀로 함께 출력해 보세요.
 -- 두 임금의 차이는 얼마인가요? 함께 "최고임금 – 최저임금"이란 타이틀로 출력해 보세요.
 select 
-	emp_no,
 	max(salary) as '최고임금', 
     min(salary) as '최저임금',
     max(salary) - min(salary) as '최고임금 – 최저임금'
-from salaries
-group by emp_no;
+from salaries;
 
 -- 문제2. (max)
 -- 마지막으로 신입사원이 들어온 날은 언제 입니까? 다음 형식으로 출력해주세요.
