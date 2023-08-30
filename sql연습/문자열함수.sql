@@ -5,6 +5,7 @@
 -- upper
 select upper('seoul'), ucase('SeOuL') from dual;
 select upper(first_name) from employees;
+--test
 
 -- lower
 select lower('SEOUL'), lcase('sEoUl') from dual;
