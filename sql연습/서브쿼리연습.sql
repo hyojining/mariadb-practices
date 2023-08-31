@@ -13,7 +13,7 @@ select a.n, a.s, a.r
 from (select now() as n, sysdate() as s, 3 + 1 as r from dual) a;
 
 --
--- 3) select의 shere절(having절)의 서브쿼리
+-- 3) select의 where절(having절)의 서브쿼리
 --
 -- 예제: 현재, Fai Bale 이 근무하는 부서에서 근무하는 다른 직원의 사번, 이름을 출력
 
