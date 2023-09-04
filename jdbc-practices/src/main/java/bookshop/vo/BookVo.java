@@ -5,6 +5,7 @@ public class BookVo {
 	private String title;
 	private String rent;
 	private Long authorNo;
+	private String name;
 	
 	public int getNo() {
 		return no;
@@ -29,11 +30,17 @@ public class BookVo {
 	}
 	public void setAuthorNo(Long authorNo) {
 		this.authorNo = authorNo;
+	}	
+	public String getName() {
+		return name;
 	}
-	
+	public void setName(String name) {
+		this.name = name;
+	}
 	@Override
 	public String toString() {
-		return "BookVo [no=" + no + ", title=" + title + ", rent=" + rent + ", authorNo=" + authorNo + "]";
+		return "BookVo [no=" + no + ", title=" + title + ", rent=" + rent + ", authorNo=" + authorNo + ", name=" + name
+				+ "]";
 	}
 	
 }

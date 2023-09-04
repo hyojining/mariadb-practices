@@ -14,6 +14,53 @@ import hr.dao.vo.EmployeesVo;
 public class BookDao {
 
 	public void updateRent(BookVo vo) {
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			// 1. JDBC Driver Class 로딩
+			Class.forName("org.mariadb.jdbc.Driver");
+			
+			// 2. 연결하기
+			String url = "jdbc:mariadb://192.168.0.176:3307/webdb?charset=utf8";
+			conn = DriverManager.getConnection(url, "webdb", "webdb");
+			
+			// 3. Statement 객체 생성
+			String sql = 
+					" udpate book" +
+					"    set rent = ?" + 
+					"  where no = ?";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			// 4. binding
+			pstmt.setString(1, vo.getRent());
+			pstmt.setInt(2, vo.getNo());
+
+			// 5. SQL 실행
+			pstmt.executeQuery();
+			
+		} catch (ClassNotFoundException e) {
+			System.out.println("드라이버 로딩 실패:" + e);
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		} finally {
+			try {
+				// 6. 자원정리
+				if(pstmt != null) {
+					pstmt.close();
+				}
+				if(conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public List<BookVo> findAll() {
 		List<BookVo> result = new ArrayList<>();
 		
 		Connection conn = null;
@@ -30,29 +77,25 @@ public class BookDao {
 			
 			// 3. Statement 객체 생성
 			String sql = 
-					" select a.no, a.title, a.rent, b.name" +
+					" select a.title, b.name, a.rent" +
 					"   from book a, author b" +
-					"  where a.author_no = b.no" +
-					"    and a.no = ?";
+					"  where a.author_no = b.no";
 			
 			pstmt = conn.prepareStatement(sql);
-			
-			// 4. binding
-			pstmt.setInt(1, vo.getNo());
 
-			// 5. SQL 실행
+			// 4. SQL 실행
 			rs = pstmt.executeQuery();
 			
-			// 6. 결과 처리
+			// 5. 결과 처리
 			while(rs.next()) {
-				Long empNo = rs.getLong(1);
-				String firstName = rs.getString(2);
-				String lastName = rs.getString(3);
+				String title = rs.getString(1);
+				String name = rs.getString(2);
+				String rent = rs.getString(3);
 				
-				EmployeesVo vo = new EmployeesVo();
-				vo.setEmpNo(empNo);
-				vo.setFirstName(firstName);
-				vo.setLastName(lastName);
+				BookVo vo = new BookVo();
+				vo.setTitle(title);
+				vo.setName(name);
+				vo.setRent(rent);
 				
 				result.add(vo);
 			}
@@ -77,11 +120,7 @@ public class BookDao {
 				e.printStackTrace();
 			}
 		}
-	}
-
-	public List<BookVo> findAll() {
-		
-		return null;
+		return result;
 	}
 
 }

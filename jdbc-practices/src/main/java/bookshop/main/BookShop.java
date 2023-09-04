@@ -6,6 +6,7 @@ import java.util.Scanner;
 import bookshop.dao.BookDao;
 import bookshop.example.Book;
 import bookshop.vo.BookVo;
+import hr.dao.vo.EmployeesVo;
 
 public class BookShop {
 
@@ -29,5 +30,10 @@ public class BookShop {
 	private static void displayBookInfo() {
 		System.out.println("*****도서 정보 출력하기******");
 		List<BookVo> list = new BookDao().findAll();
+		for(BookVo vo : list) {
+			System.out.println("책 제목:" + vo.getTitle() + 
+								", 작가:" + vo.getName() + 
+								", 대여 유무:" + (vo.getRent() == "Y" ? "재고있음" : "대여중"));
+		}
 	}
 }
