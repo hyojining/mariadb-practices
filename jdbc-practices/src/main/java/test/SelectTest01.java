@@ -51,6 +51,7 @@ public class SelectTest01 {
 			System.out.println("error:" + e);
 		} finally {
 			try {
+				// 6. 자원정리
 				if(rs != null) {
 					rs.close();
 				}
