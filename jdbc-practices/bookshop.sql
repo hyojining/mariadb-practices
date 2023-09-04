@@ -25,3 +25,6 @@ insert into book(title, author_no) values('풀하우스', 6);
 select * from author;
 select * from book;
 
+select a.no, a.title, a.rent, b.name
+from book a, author b
+where a.author_no = b.no;

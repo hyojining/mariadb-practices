@@ -1,8 +1,11 @@
 package bookshop.main;
 
+import java.util.List;
 import java.util.Scanner;
 
+import bookshop.dao.BookDao;
 import bookshop.example.Book;
+import bookshop.vo.BookVo;
 
 public class BookShop {
 
@@ -18,7 +21,7 @@ public class BookShop {
 		vo.setNo(no);
 		vo.setRent("Y");
 		
-		new BookDao.updateRent(vo);
+		new BookDao().updateRent(vo);
 		
 		displayBookInfo();
 	}
