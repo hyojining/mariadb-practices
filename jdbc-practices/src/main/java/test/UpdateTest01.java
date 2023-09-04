@@ -8,11 +8,15 @@ import java.sql.Statement;
 public class UpdateTest01 {
 
 	public static void main(String[] args) {
-		boolean result = updateDepartment(2L, "전략기획팀");
+		DeptVo vo = new DeptVo();
+		vo.setNo(2L);
+		vo.setName("기획팀");
+		
+		boolean result = updateDepartment(vo);
 		System.out.println(result ? "성공" : "실패");
 	}
 
-	private static boolean updateDepartment(long no, String name) {
+	private static boolean updateDepartment(DeptVo vo) {
 		boolean result = false;
 		Connection conn = null;
 		Statement stmt = null;
@@ -31,8 +35,8 @@ public class UpdateTest01 {
 			// 4. SQL 실행
 			String sql = 
 					" update dept" +
-					"    set name='" + name + "'" +
-					"  where no=" + no;
+					"    set name='" + vo.getName() + "'" +
+					"  where no=" + vo.getNo();
 			
 			int count = stmt.executeUpdate(sql);
 			
