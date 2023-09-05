@@ -28,7 +28,7 @@ public class BookDao {
 			
 			// 3. Statement 객체 생성
 			String sql = 
-					" udpate book" +
+					" update book" +
 					"    set rent = ?" + 
 					"  where no = ?";
 			
@@ -83,10 +83,10 @@ public class BookDao {
 			
 			pstmt = conn.prepareStatement(sql);
 
-			// 4. SQL 실행
+			// 5. SQL 실행
 			rs = pstmt.executeQuery();
 			
-			// 5. 결과 처리
+			// 6. 결과 처리
 			while(rs.next()) {
 				String title = rs.getString(1);
 				String name = rs.getString(2);
