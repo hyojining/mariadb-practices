@@ -8,27 +8,25 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import bookmall.vo.MemberVo;
+import bookmall.vo.BookVo;
 
-public class MemberDao {
-	
-	public void insertMember(MemberVo vo) {
+public class BookDao {
+	public void insertBook(BookVo vo) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		
 		try {
 			conn = getConnection();
-			
-			String sql = "insert into member values(null, ?, ?, ?, ?)";
+
+			String sql = "insert into book values(null, ?, ?, ?)";
 			pstmt = conn.prepareStatement(sql);
-			
-			pstmt.setString(1, vo.getName());
-			pstmt.setString(2, vo.getPhone());
-			pstmt.setString(3, vo.getEmail());
-			pstmt.setString(4, vo.getPw());
-			
+
+			pstmt.setLong(1, vo.getCategory_no());
+			pstmt.setString(2, vo.getTitle());
+			pstmt.setLong(3, vo.getPrice());
+
 			pstmt.executeUpdate();
-		
+	
 		} catch (SQLException e) {
 			System.out.println("error:" + e);
 		} finally {
@@ -45,34 +43,32 @@ public class MemberDao {
 		}
 	}
 
-	public List<MemberVo> findAllMember() {
-		List<MemberVo> result = new ArrayList<>();
+	public List<BookVo> findAllBook() {
+		List<BookVo> result = new ArrayList<>();
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
 		try {
 			conn = getConnection();
-
-			String sql = " select no, name, phone, email, pw" +
-						 "   from member";
+			
+			String sql = " select no, category_no, title, price" +
+						 "   from book";
 			pstmt = conn.prepareStatement(sql);
-
+			
 			rs = pstmt.executeQuery();
 
 			while(rs.next()) {
 				Long no = rs.getLong(1);
-				String name = rs.getString(2);
-				String phone = rs.getString(3);
-				String email = rs.getString(4);
-				String pw = rs.getString(5);
+				Long category_no = rs.getLong(2);
+				String title = rs.getString(3);
+				Long price = rs.getLong(4);
 				
-				MemberVo vo = new MemberVo();
+				BookVo vo = new BookVo();
 				vo.setNo(no);
-				vo.setName(name);
-				vo.setPhone(phone);
-				vo.setEmail(email);
-				vo.setPw(pw);
+				vo.setCategory_no(category_no);
+				vo.setTitle(title);
+				vo.setPrice(price);
 				
 				result.add(vo);
 			}
@@ -101,7 +97,7 @@ public class MemberDao {
 		Connection conn = null;
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
-
+			
 			String url = "jdbc:mariadb://192.168.0.176:3307/bookmall?charset=utf8";
 			conn = DriverManager.getConnection(url, "bookmall", "bookmall");
 			

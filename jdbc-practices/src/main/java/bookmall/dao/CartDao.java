@@ -8,27 +8,26 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import bookmall.vo.MemberVo;
+import bookmall.vo.CartVo;
 
-public class MemberDao {
-	
-	public void insertMember(MemberVo vo) {
+public class CartDao {
+
+	public void insertCart(CartVo vo) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		
 		try {
 			conn = getConnection();
 			
-			String sql = "insert into member values(null, ?, ?, ?, ?)";
+			String sql = "insert into cart values(null, ?, ?, ?)";
 			pstmt = conn.prepareStatement(sql);
 			
-			pstmt.setString(1, vo.getName());
-			pstmt.setString(2, vo.getPhone());
-			pstmt.setString(3, vo.getEmail());
-			pstmt.setString(4, vo.getPw());
-			
+			pstmt.setLong(1, vo.getMember_no());
+			pstmt.setLong(2, vo.getBook_no());
+			pstmt.setLong(3, vo.getCount());
+
 			pstmt.executeUpdate();
-		
+
 		} catch (SQLException e) {
 			System.out.println("error:" + e);
 		} finally {
@@ -45,34 +44,38 @@ public class MemberDao {
 		}
 	}
 
-	public List<MemberVo> findAllMember() {
-		List<MemberVo> result = new ArrayList<>();
+	public List<CartVo> findAllCart() {
+		List<CartVo> result = new ArrayList<>();
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
 		try {
 			conn = getConnection();
-
-			String sql = " select no, name, phone, email, pw" +
-						 "   from member";
+			
+			String sql = " select a.no, a.member_no, a.book_no, a.count, c.title, c.price * a.count" +
+						 "   from cart a, member b, book c" +
+					     "  where a.member_no = b.no" + 
+						 "    and a.book_no = c.no";
 			pstmt = conn.prepareStatement(sql);
-
+			
 			rs = pstmt.executeQuery();
 
 			while(rs.next()) {
 				Long no = rs.getLong(1);
-				String name = rs.getString(2);
-				String phone = rs.getString(3);
-				String email = rs.getString(4);
-				String pw = rs.getString(5);
+				Long member_no = rs.getLong(2);
+				Long book_no = rs.getLong(3);
+				Long count = rs.getLong(4);
+				String title = rs.getString(5);
+				Long price = rs.getLong(6);
 				
-				MemberVo vo = new MemberVo();
+				CartVo vo = new CartVo();
 				vo.setNo(no);
-				vo.setName(name);
-				vo.setPhone(phone);
-				vo.setEmail(email);
-				vo.setPw(pw);
+				vo.setMember_no(member_no);
+				vo.setBook_no(book_no);
+				vo.setCount(count);
+				vo.setTitle(title);
+				vo.setPrice(price);
 				
 				result.add(vo);
 			}
@@ -96,12 +99,12 @@ public class MemberDao {
 		}
 		return result;
 	}
-
+	
 	private Connection getConnection() throws SQLException {
 		Connection conn = null;
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
-
+			
 			String url = "jdbc:mariadb://192.168.0.176:3307/bookmall?charset=utf8";
 			conn = DriverManager.getConnection(url, "bookmall", "bookmall");
 			
